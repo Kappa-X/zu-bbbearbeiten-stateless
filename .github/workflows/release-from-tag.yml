@@ -16,33 +16,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Publish release
-      id: publish-release
-      uses: ghalactic/github-release-from-tag@v5
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
       with:
-         prerelease: "false"
-         reactions: heart,rocket,eyes
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-  executable:
-    runs-on: windows-latest
-    timeout-minutes: 10
-    permissions:
-      contents: write
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Create Executable
-      uses: sayyid5416/pyinstaller@v1
-      with:
-        python_ver: '3.11'
-        spec: 'main.spec'
-        requirements: 'requirements.txt'
-        upload_exe_with_name: 'zu-bbbearbeiten.exe'
-
-    - name: Upload Release Asset
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run:
-        gh release upload ${{ github.ref_name }} ./dist/main.exe
+    - name: Build the Docker image
+      run: |
+            docker build . --tag ghcr.io/${{github.actor}}/${{ github.event.repository.name }}:latest
+            docker run ghcr.io/${{github.actor}}/${{ github.event.repository.name }}:latest
+            docker push ghcr.io/${{github.actor}}/${{ github.event.repository.name }}:latest
