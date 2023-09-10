@@ -31,8 +31,7 @@ jobs:
         OWNER: '${{ github.repository_owner }}'
       shell: bash
 
-    - name: Build the Docker image
+    - name: Build the Docker container
       run: |
             docker build . --tag ghcr.io/${{ steps.lowercase_username.outputs.actor }}/${{ github.event.repository.name }}:latest
-            docker run ghcr.io/${{ steps.lowercase_username.outputs.actor }}/${{ github.event.repository.name }}:latest
             docker push ghcr.io/${{ steps.lowercase_username.outputs.actor }}/${{ github.event.repository.name }}:latest
