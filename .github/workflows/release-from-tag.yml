@@ -26,13 +26,13 @@ jobs:
     - name: set lower case owner name
       id: lowercase_username
       run: |
-        echo "${OWNER,,}"
+        echo "actor=${OWNER,,}" >> $GITHUB_OUTPUT
       env:
         OWNER: '${{ github.repository_owner }}'
       shell: bash
 
     - name: Build the Docker image
       run: |
-            docker build . --tag ghcr.io/${{ steps.lowercase_username.outputs.lowercase_username }}/${{ github.event.repository.name }}:latest
-            docker run ghcr.io/${{ steps.lowercase_username.outputs.lowercase_username }}/${{ github.event.repository.name }}:latest
-            docker push ghcr.io/${{ steps.lowercase_username.outputs.lowercase_username }}/${{ github.event.repository.name }}:latest
+            docker build . --tag ghcr.io/${{ steps.lowercase_username.outputs.actor }}/${{ github.event.repository.name }}:latest
+            docker run ghcr.io/${{ steps.lowercase_username.outputs.actor }}/${{ github.event.repository.name }}:latest
+            docker push ghcr.io/${{ steps.lowercase_username.outputs.actor }}/${{ github.event.repository.name }}:latest
