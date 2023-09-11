@@ -1,9 +1,6 @@
-              - name: GitHub Release from Tag
-                uses: ghalactic/github-release-from-tag@v5
+name: GitHub Release from Tag
+uses: ghalactic/github-release-from-tag@v5
             
-
-name: Release from tag
-
 on:
   ???
 
